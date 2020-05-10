@@ -16,10 +16,10 @@ class PomodoroTimer extends Component {
     super(props);
     this.state = {
       isOnWorkTime: true,
-      workMinuteTimer: 0,
-      workSecondsTimer: 5,
-      relaxMinuteTimer: 0,
-      relaxSecondsTimer: 2,
+      workMinuteTimer: 24,
+      workSecondsTimer: 59,
+      relaxMinuteTimer: 5,
+      relaxSecondsTimer: 59,
     };
   }
 
