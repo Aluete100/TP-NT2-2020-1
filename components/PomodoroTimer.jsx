@@ -11,7 +11,7 @@ class PomodoroTimer extends Component {
       isOnWorkTime: true,
       workMinuteTimer: 24,
       workSecondsTimer: 59,
-      relaxMinuteTimer: 5,
+      relaxMinuteTimer: 4,
       relaxSecondsTimer: 59,
     };
   }
@@ -20,10 +20,18 @@ class PomodoroTimer extends Component {
     this._intervalController();
   }
 
-  componentDidUpdate(previousProps, previousState) {
-    if (this.state.workMinuteTimer === 0 && this.state.workSecondsTimer === 0) {
-      console.log("Hora de descansar");
+  componentDidUpdate() {
+    if (this.state.workSecondsTimer === 0) {
+      this.setState((prevState) => ({
+        workMinuteTimer: prevState.workMinuteTimer - 1,
+        workSecondsTimer: 59,
+      }));
+    }
 
+    if (
+      (this.state.workMinuteTimer === 0 && this.state.workSecondsTimer === 0) ||
+      (this.state.relaxMinuteTimer === 0 && this.state.relaxSecondsTimer === 0)
+    ) {
       this._restartTimer();
     }
   }
@@ -32,20 +40,22 @@ class PomodoroTimer extends Component {
     clearInterval(this.interval);
   }
 
-  _restartTimer() {
+  async _restartTimer() {
     console.log("Cambio el modo del cronomentro");
 
     vibrate();
     clearInterval(this.interval);
 
-    this.setState((prevState) => {
-      isOnWorkTime: !prevState.isOnWorkTime;
-    });
+    await this.setState((prevState) => ({
+      isOnWorkTime: !prevState.isOnWorkTime,
+    }));
 
-    this._intervalController;
+    this._intervalController();
   }
 
   _intervalController() {
+    console.log("Reinicio el intervalo");
+
     if (this.state.isOnWorkTime) {
       this.interval = setInterval(
         () =>
